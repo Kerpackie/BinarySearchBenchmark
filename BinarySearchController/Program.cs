@@ -46,29 +46,41 @@ class Program
 
     private static void RunBenchmark(int amount, long target)
     {
-        for (var i = 0; i < amount; i++)
+        amount += 1;
+        
+        Console.WriteLine("Running Benchmark...");
+        
+        for (var i = 1; i < amount; i++)
         {
+            Console.WriteLine($"Running Binary Search Iteration {i}...");
+            
             string[] args = { "binary", target.ToString(), i.ToString() };
             Process.Start(FilePaths.SEARCH_HANDLER, args);
             Thread.Sleep(100);
         }
         
-        for (var i = 0; i < amount; i++)
+        for (var i = 1; i < amount; i++)
         {
+            Console.WriteLine($"Running Recognising Equality Binary Search Iteration {i}...");
+            
             string[] args = { "recognising", target.ToString(), i.ToString() };
             Process.Start(FilePaths.SEARCH_HANDLER, args);
             Thread.Sleep(100);
         }
         
-        for (var i = 0; i < amount; i++)
+        for (var i = 1; i < amount; i++)
         {
+            Console.WriteLine($"Running Forgetful Binary Search Iteration {i}...");
+            
             string[] args = { "forgetful", target.ToString(), i.ToString() };
             Process.Start(FilePaths.SEARCH_HANDLER, args);
             Thread.Sleep(100);
         }
         
-        for (var i = 0; i < amount; i++)
+        for (var i = 1; i < amount; i++)
         {
+            Console.WriteLine($"Running Recursive Binary Search Iteration {i}...");
+            
             string[] args = { "recursive", target.ToString(), i.ToString() };
             Process.Start(FilePaths.SEARCH_HANDLER, args);
             Thread.Sleep(100);

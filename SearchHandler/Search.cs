@@ -2,23 +2,22 @@
 
 public static class Search
 {
-    private static int recursiveComparisons = 0;
+    private static int _recursiveComparisons = 0;
     
-    public static int BinarySearch(List<long> inputList, long searchValue)
+    public static long BinarySearch(List<long> inputList, long searchValue, out int comparisons)
     {
-        int midPoint;
         var firstVal = 0;
         var lastVal = inputList.Count - 1;
-        var comparisons = 0;
-        
+        comparisons = 0;
+
         var found = false;
         var moreToSearch = firstVal <= lastVal;
 
         while (moreToSearch && !found)
         {
             comparisons++;
-            
-            midPoint = (firstVal + lastVal) / 2;
+
+            var midPoint = (firstVal + lastVal) / 2;
 
             if (searchValue < inputList[midPoint])
             {
@@ -36,14 +35,55 @@ public static class Search
             }
         }
 
-        return comparisons;
+        if (found)
+        {
+            return inputList[(firstVal + lastVal) / 2];
+        }
+        else
+        {
+            return -1;
+        }
     }
 
-    public static int ForgetfulBinarySearch(List<long> inputList, long searchValue)
+
+    public static long ForgetfulBinarySearch(List<long> list, long item, out int comparisons)
     {
+        var first = 0;
+        var last = list.Count - 1;
+        comparisons = 0; // Initialize comparisons counter
+
+        while (first < last)
+        {
+            var midPoint = (first + last) / 2;
+            comparisons++; // Increment comparisons counter
+
+            if (item > list[midPoint])
+                first = midPoint + 1;
+            else
+                last = midPoint;
+        }
+
+        if (last == -1)
+        {
+            return -1;
+        }
+
+        if (item == list[first])
+        {
+            return list[first];
+        }
+
+        return -1;
+    }
+
+
+
+    public static long RecognisingEqualityBinarySearch(List<long> inputList, long searchValue, out int comparisons)
+    {
+        comparisons = 0;
+
         var left = 0;
         var right = inputList.Count - 1;
-        var comparisons = 0;
 
         while (left <= right)
         {
@@ -52,9 +92,9 @@ public static class Search
 
             if (inputList[mid] == searchValue)
             {
-                return comparisons;
+                return inputList[mid];
             }
-
+        
             if (inputList[mid] < searchValue)
             {
                 left = mid + 1;
@@ -63,60 +103,51 @@ public static class Search
             {
                 right = mid - 1;
             }
-
-            var forgetIndex = mid - (int)Math.Sqrt(right - left + 1);
-            if (forgetIndex >= left && forgetIndex <= right)
-            {
-                left = forgetIndex + 1;
-            }
         }
 
+        // If the loop exits without finding the search value, return -1
         return -1;
     }
-
-    public static int RecognisingEqualityBinarySearch(List<long> inputList, long searchValue)
+ 
+    public static (int index, int comparisons) RecursiveBinary(List<long> list, int left, int right, long target)
     {
-        var comparisons = 0;
-
-        var left = 0;
-        var right = inputList.Count - 1;
-
-        while (left <= right)
+        int comp = 0;
+        if (right >= left)
         {
-
-            var mid = left + (right - left) / 2;
-
-            comparisons++;
-
-            if (inputList[mid] == searchValue)
+            int mid = left + (right - left) / 2;
+            _recursiveComparisons++; // Increment count for the comparison made in this step
+            if (list[mid] == target)
             {
-                return comparisons;
+                comp = _recursiveComparisons;
+                _recursiveComparisons = 0;
+                return (mid, comp); // Return the index where target was found and the number of comparisons
             }
-            
-            if (inputList[mid] < searchValue)
+            if (list[mid] > target)
             {
-                left = mid + 1;
+                var result = RecursiveBinary(list, left, mid - 1, target);
+                return (result.index, _recursiveComparisons); // Return the index found or -1 if nothing found and the total number of comparisons
             }
-            else
-            {
-                right = mid - 1;
-            }
+            var result2 = RecursiveBinary(list, mid + 1, right, target);
+            return (result2.index, _recursiveComparisons); // Return the index found or -1 if nothing found and the total number of comparisons
         }
 
-        return -1;
+        comp = _recursiveComparisons;
+        _recursiveComparisons = 0;
+        return (-1, comp); // Return -1 if target is not found and the number of comparisons
     }
+
     
-    public static int RecursiveBinary(List<long> list, int left, int right, long target)
+    /*public static int RecursiveBinary(List<long> list, int left, int right, long target)
     {
         var comp = 0;
         if (right >= left)
         {
             var mid = left + (right - left) / 2;
-            recursiveComparisons++; // Increment count for the comparison made in this step
+            _recursiveComparisons++; // Increment count for the comparison made in this step
             if (list[mid] == target)
             {
-                comp = recursiveComparisons;
-                recursiveComparisons = 0;
+                comp = _recursiveComparisons;
+                _recursiveComparisons = 0;
                 return comp;
             }
             if (list[mid] > target)
@@ -124,9 +155,10 @@ public static class Search
             return RecursiveBinary(list, mid + 1, right, target) + 1; // Increment count for current comparison
         }
 
-        comp = recursiveComparisons;
-        recursiveComparisons = 0;
+        comp = _recursiveComparisons;
+        _recursiveComparisons = 0;
         return comp; // Return the count of comparisons made
     }
     
+}*/
 }

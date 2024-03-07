@@ -7,7 +7,9 @@ class Program
 {
     static void Main(string[] args)
     {
-        var benchmarkType = args[0];
+        ForgetfulBinarySearch(Benchmark.TARGET, "1", "forgetful");
+        
+        /*var benchmarkType = args[0];
         var target = long.Parse(args[1]);
         var iteration = args[2];
         
@@ -17,7 +19,7 @@ class Program
                 RunBinarySearch(target, iteration, benchmarkType);
                 break;
             case "recognising":
-                RunRecognisingEqaualityBinarySearch(target, iteration, benchmarkType);
+                RunRecognisingEqualityBinarySearch(target, iteration, benchmarkType);
                 break;
             case "forgetful":
                 ForgetfulBinarySearch(target, iteration, benchmarkType);
@@ -25,7 +27,7 @@ class Program
             case "recursive":
                 RunRecursiveBinarySearch(target, iteration, benchmarkType);
                 break;
-        }
+        }*/
     }
 
     private static void RunBinarySearch(long target, string iteration, string benchmarkType)
@@ -34,21 +36,23 @@ class Program
         var inputList = Benchmark.LoadUniqueNumbersFromFile();
         var sw = new Stopwatch();
         sw.Start();
-        var count = Search.BinarySearch(inputList, target);
+        var result = Search.BinarySearch(inputList, target, out var comparisons);
         sw.Stop();
         
-        Benchmark.OutputResultsToFile(sw.ElapsedTicks, sw.ElapsedMilliseconds, count, benchmarkType, iteration);
+        Benchmark.OutputResultsToFile(sw.ElapsedTicks, sw.ElapsedMilliseconds, comparisons, benchmarkType, 
+            iteration, result);
     }
     
-    private static void RunRecognisingEqaualityBinarySearch(long target, string iteration, string benchmarkType)
+    private static void RunRecognisingEqualityBinarySearch(long target, string iteration, string benchmarkType)
     {
         var inputList = Benchmark.LoadUniqueNumbersFromFile();
         var sw = new Stopwatch();
         sw.Start();
-        var count = Search.RecognisingEqualityBinarySearch(inputList, target);
+        var result = Search.RecognisingEqualityBinarySearch(inputList, target, out var comparisons);
         sw.Stop();
         
-        Benchmark.OutputResultsToFile(sw.ElapsedTicks, sw.ElapsedMilliseconds, count, benchmarkType, iteration);
+        Benchmark.OutputResultsToFile(sw.ElapsedTicks, sw.ElapsedMilliseconds, comparisons, benchmarkType, 
+            iteration, result);
     }
     
     private static void ForgetfulBinarySearch(long target, string iteration, string benchmarkType)
@@ -56,10 +60,11 @@ class Program
         var inputList = Benchmark.LoadUniqueNumbersFromFile();
         var sw = new Stopwatch();
         sw.Start();
-        var count = Search.ForgetfulBinarySearch(inputList, target);
+        long result = Search.ForgetfulBinarySearch(inputList, target, out var comparisons);
         sw.Stop();
         
-        Benchmark.OutputResultsToFile(sw.ElapsedTicks, sw.ElapsedMilliseconds, count, benchmarkType, iteration);
+        Benchmark.OutputResultsToFile(sw.ElapsedTicks, sw.ElapsedMilliseconds, comparisons, benchmarkType, 
+            iteration, result);
     }
     
     private static void RunRecursiveBinarySearch(long target, string iteration, string benchmarkType)
@@ -67,10 +72,12 @@ class Program
         var inputList = Benchmark.LoadUniqueNumbersFromFile();
         var sw = new Stopwatch();
         sw.Start();
-        var count = Search.RecursiveBinary(inputList, 0, inputList.Count - 1, target);
+        var result = Search.RecursiveBinary(inputList, 0, inputList.Count - 1, target);
+        
         sw.Stop();
         
-        Benchmark.OutputResultsToFile(sw.ElapsedTicks, sw.ElapsedMilliseconds, count, benchmarkType, iteration);
+        Benchmark.OutputResultsToFile(sw.ElapsedTicks, sw.ElapsedMilliseconds, result.comparisons, benchmarkType, 
+            iteration, result.index);
     }
     
 }
