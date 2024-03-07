@@ -7,9 +7,9 @@ class Program
 {
     static void Main(string[] args)
     {
-        ForgetfulBinarySearch(Benchmark.TARGET, "1", "forgetful");
+        /*ForgetfulBinarySearch(Benchmark.TARGET, "1", "forgetful");*/
         
-        /*var benchmarkType = args[0];
+        var benchmarkType = args[0];
         var target = long.Parse(args[1]);
         var iteration = args[2];
         
@@ -27,7 +27,7 @@ class Program
             case "recursive":
                 RunRecursiveBinarySearch(target, iteration, benchmarkType);
                 break;
-        }*/
+        }
     }
 
     private static void RunBinarySearch(long target, string iteration, string benchmarkType)
